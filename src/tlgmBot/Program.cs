@@ -1,101 +1,105 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using File = System.IO.File;
 
 namespace tlgmBot
 {
     class Program
     {
-        static string _APIToken = "143897472:AAHJsokXN9rpQizFRMcUlm0qGvAtJXgK-yo";
-
         static void Main(string[] args)
         {
-            var _bot = new Telegram.Bot.Api(_APIToken);
-
-            _bot.IsReceiving = true;
-
-            //testApi(_bot);
-            Answer(_bot);
-
-            //Console.ReadLine();
+            Run().Wait();
         }
 
-        static void testApi(Telegram.Bot.Api _bot)
+        static async Task Run()
         {
-            var me = _bot.GetMe().Result;
+            var Bot = new Api("API_KEY");
 
-            System.Console.WriteLine("Hello my name is " + me.FirstName);
-        }
+            var me = await Bot.GetMe();
 
-        static async void Answer(Telegram.Bot.Api _bot)
-        {
-            var me = await _bot.GetMe();
+            Console.WriteLine("Hello my name is {0}", me.Username);
 
-            _bot.StartReceiving();
+            var offset = 0;
 
-            var messages = await _bot.GetUpdates();
-
-            foreach (var item in messages)
+            while (true)
             {
-                switch (item.Message.Chat.Type)
+                var updates = await Bot.GetUpdates(offset);
+
+                foreach (var update in updates)
                 {
-                    case Telegram.Bot.Types.ChatType.Private:
-                        if (item.Message.Text.ToLower().Contains("oi"))
-                        {
-                            var welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, string.Format("Olá Danado(a), eu sou o {0}!", me.FirstName));
-                        }
-                        else if (item.Message.Text.ToLower().Contains("bom dia"))
-                        {
-                            var welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "Bom dia Danados(as)!");
-                        }
-                        else if (item.Message.Text.ToLower().Contains("doideira"))
-                        {
-                            var welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "KKK");
-                            welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "Doideira hein?");
-                        }
-                        else
-                        {
-                            var welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "Não entendi o que você falou!");
-                            welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "Meu dono ainda não me ensinou tudo.");
-                        }
-                        break;
+                    Message t;
 
-                    case Telegram.Bot.Types.ChatType.Group:
-                        if (item.Message.Text.ToLower().Contains("bom dia"))
-                        {
-                            var welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "Bom dia Danados(as)!");
-                        }
+                    switch (update.Message.Chat.Type)
+                    {
+                        case ChatType.Private:
 
-                        if (item.Message.Text.ToLower().Contains("doideira"))
-                        {
-                            var welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "KKK");
-                            welcomeMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "Doideira hein?");
-                        }
+                            await Bot.SendChatAction(update.Message.Chat.Id, ChatAction.Typing);
+                            await Task.Delay(2000);
 
-                        if (item.Message.Text == "/command1")
-                        {
-                            var message = await _bot.SendTextMessage(item.Message.Chat.Id, "Oi Danado(a)!");
-                        }
-                        else if (item.Message.Text == "/command2")
-                        {
-                            var message = await _bot.SendTextMessage(item.Message.Chat.Id, "Beijos!");
-                        }
-                        else if (item.Message.Text == "/command3")
-                        {
-                            var message = await _bot.SendTextMessage(item.Message.Chat.Id, "Eu? Eu o que Danado(a)?");
-                        }
-                        break;
+                            if (update.Message.Text.ToLower().Contains("oi"))
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, string.Format("Olá Danado(a), eu sou o {0}!", me.FirstName));
+                                Console.WriteLine("Echo Message: {0}", update.Message.Text);
+                            }
+                            else if (update.Message.Text.ToLower().Contains("bom dia"))
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Bom dia Danados(as)!");
+                            }
+                            else if (update.Message.Text.ToLower().Contains("doideira"))
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "KKK");
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Doideira hein?");
+                            }
+                            else
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Não entendi o que você falou!");
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Meu dono ainda não me ensinou tudo.");
+                            }
+                            break;
 
-                    default:
-                        break;
+                        case Telegram.Bot.Types.ChatType.Group:
+
+                            await Bot.SendChatAction(update.Message.Chat.Id, ChatAction.Typing);
+                            await Task.Delay(2000);
+                            
+                            if (update.Message.Text.ToLower().Contains("bom dia"))
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Bom dia Danados(as)!");
+                            }
+
+                            if (update.Message.Text.ToLower().Contains("doideira"))
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "KKK");
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Doideira hein?");
+                            }
+
+                            if (update.Message.Text == "/command1")
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Oi Danado(a)!");
+                            }
+                            else if (update.Message.Text == "/command2")
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Beijos!");
+                            }
+                            else if (update.Message.Text == "/command3")
+                            {
+                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Eu? Eu o que Danado(a)?");
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    offset = update.Id + 1;
                 }
 
-                //var newMessage = await _bot.SendTextMessage(item.Message.Chat.Id, "Danado!");
+                await Task.Delay(1000);
             }
-
-            _bot.StopReceiving();
         }
     }
 }
