@@ -52,11 +52,11 @@ namespace tlgmBot
                                 t = await Bot.SendTextMessage(update.Message.Chat.Id, "KKK");
                                 t = await Bot.SendTextMessage(update.Message.Chat.Id, "Doideira hein?");
                             }
-                            else if (update.Message.Text.ToLower().Contains("danado"))
+                            else if (update.Message.Text.ToLower().Equals("danado"))
                             {
                                 t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadoooooooooo!");
                             }
-                            else if (update.Message.Text.ToLower().Contains("danada"))
+                            else if (update.Message.Text.ToLower().Equals("danada"))
                             {
                                 t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadaaaaaaaaaa!");
                             }
@@ -85,12 +85,12 @@ namespace tlgmBot
                                 t = await Bot.SendTextMessage(update.Message.Chat.Id, "Doideira hein?");
                             }
 
-                            if (update.Message.Text.ToLower().Contains("danado"))
+                            if (update.Message.Text.ToLower().Equals("danado"))
                             {
                                 t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadoooooooooo!");
                             }
 
-                            if (update.Message.Text.ToLower().Contains("danada"))
+                            if (update.Message.Text.ToLower().Equals("danada"))
                             {
                                 t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadaaaaaaaaaa!");
                             }
