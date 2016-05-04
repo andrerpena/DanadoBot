@@ -20,7 +20,7 @@ namespace tlgmBot
             var Bot = new Api("API-KEY");
 
             var me = await Bot.GetMe();
-            
+
             var offset = 0;
 
             while (true)
@@ -29,92 +29,112 @@ namespace tlgmBot
 
                 foreach (var update in updates)
                 {
-                    Message t;
-
-                    switch (update.Message.Chat.Type)
+                    if (update.Message != null && !string.IsNullOrEmpty(update.Message.Text))
                     {
-                        case ChatType.Private:
+                        Console.WriteLine("*");
 
-                            await Bot.SendChatAction(update.Message.Chat.Id, ChatAction.Typing);
-                            await Task.Delay(2000);
+                        Message t;
 
-                            if (update.Message.Text.ToLower().Equals("oi"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, string.Format("Olá, eu sou o {0}!", me.FirstName));
-                                Console.WriteLine("Echo Message: {0}", update.Message.Text);
-                            }
-                            else if (update.Message.Text.ToLower().Contains("bom dia"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Bom dia Danado(a)!");
-                            }
-                            else if (update.Message.Text.ToLower().Contains("doideira"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "KKK");
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Doideira hein?");
-                            }
-                            else if (update.Message.Text.ToLower().Equals("danado"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadoooooooooo!");
-                            }
-                            else if (update.Message.Text.ToLower().Equals("danada"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadaaaaaaaaaa!");
-                            }
-                            else
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Não entendi o que você falou!");
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Meu dono ainda não me ensinou tudo.");
-                            }
-                            break;
+                        switch (update.Message.Chat.Type)
+                        {
+                            case ChatType.Private:
+                                
+                                await Bot.SendChatAction(update.Message.Chat.Id, ChatAction.Typing);
+                                await Task.Delay(2000);
 
-                        case ChatType.Channel:
-                        case ChatType.Group:
-                        case ChatType.Supergroup:
+                                if (!string.IsNullOrEmpty(update.Message.Chat.FirstName) && update.Message.Chat.FirstName.ToLower().Contains("raul"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Pesou!");
+                                }
 
-                            await Bot.SendChatAction(update.Message.Chat.Id, ChatAction.Typing);
-                            await Task.Delay(2000);
-                            
-                            if (update.Message.Text.ToLower().Contains("bom dia"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Bom dia Danados(as)!");
-                            }
+                                if (update.Message.Text.ToLower().Equals("oi"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, string.Format("Olá, eu sou o {0}!", me.FirstName));
+                                }
+                                else if (update.Message.Text.ToLower().Contains("bom dia"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Bom dia Danado(a)!");
+                                }
+                                else if (update.Message.Text.ToLower().Contains("doideira"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "KKK");
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Doideira hein?");
+                                }
+                                else if (update.Message.Text.ToLower().Equals("danado"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadoooooooooo!");
+                                }
+                                else if (update.Message.Text.ToLower().Equals("danada"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadaaaaaaaaaa!");
+                                }
+                                else
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Não entendi o que você falou!");
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Meu dono ainda não me ensinou tudo.");
+                                }
+                                break;
 
-                            if (update.Message.Text.ToLower().Contains("doideira"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "KKK");
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Doideira hein?");
-                            }
+                            case ChatType.Channel:
+                            case ChatType.Group:
+                            case ChatType.Supergroup:
 
-                            if (update.Message.Text.ToLower().Equals("danado"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadoooooooooo!");
-                            }
+                                await Bot.SendChatAction(update.Message.Chat.Id, ChatAction.Typing);
+                                await Task.Delay(2000);
 
-                            if (update.Message.Text.ToLower().Equals("danada"))
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadaaaaaaaaaa!");
-                            }
+                                if (!string.IsNullOrEmpty(update.Message.Chat.FirstName) && update.Message.Chat.FirstName.ToLower().Contains("raul"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Pesou!");
+                                }
 
-                            if (update.Message.Text == "/start")
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Oi!");
-                            }
-                            if (update.Message.Text == "/command1")
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Oi Danado(a)!");
-                            }
-                            else if (update.Message.Text == "/command2")
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Beijos!");
-                            }
-                            else if (update.Message.Text == "/command3")
-                            {
-                                t = await Bot.SendTextMessage(update.Message.Chat.Id, "Eu? Eu o que Danado(a)?");
-                            }
-                            break;
+                                if (update.Message.Text.ToLower().Contains("pesou"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Pesou meu irmão!");
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "E vai pesar mais ainda!");
+                                }
 
-                        default:
-                            break;
+                                if (update.Message.Text.ToLower().Contains("bom dia"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Bom dia Danados(as)!");
+                                }
+
+                                if (update.Message.Text.ToLower().Contains("doideira"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "KKK");
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Doideira hein?");
+                                }
+
+                                if (update.Message.Text.ToLower().Equals("danado"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadoooooooooo!");
+                                }
+
+                                if (update.Message.Text.ToLower().Equals("danada"))
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Danadaaaaaaaaaa!");
+                                }
+
+                                if (update.Message.Text == "/start")
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Oi!");
+                                }
+                                if (update.Message.Text == "/command1")
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Oi Danado(a)!");
+                                }
+                                else if (update.Message.Text == "/command2")
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Beijos!");
+                                }
+                                else if (update.Message.Text == "/command3")
+                                {
+                                    t = await Bot.SendTextMessage(update.Message.Chat.Id, "Eu? Eu o que Danado(a)?");
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
                     }
 
                     offset = update.Id + 1;
